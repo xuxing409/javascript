@@ -3,13 +3,13 @@
  * @Github: 
  * @Date: 2022-03-03 10:51:07
  * @LastEditors: xuxing
- * @LastEditTime: 2022-03-03 11:28:06
+ * @LastEditTime: 2022-03-03 11:30:34
  * @Description: 
  */
 
 // apply实现类似call，参数为数组
 
-Function.prototype.myBind = function (context = window, args) {
+Function.prototype.myApply = function (context = window, args) {
   // 1.判断当前this是否为函数，防止Function.prototype.myCall() 直接调用
   if (context === Function.prototype) {
     return
@@ -29,5 +29,4 @@ Function.prototype.myBind = function (context = window, args) {
   }
 
   return result
-
 }
