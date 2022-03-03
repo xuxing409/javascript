@@ -1,11 +1,4 @@
-/*
- * @Author: xuxing
- * @Github: 
- * @Date: 2022-03-03 14:48:18
- * @LastEditors: xuxing
- * @LastEditTime: 2022-03-03 15:54:17
- * @Description: 
- */
+
 const user = {
   name: 'zhangsan',
   age: 21,
