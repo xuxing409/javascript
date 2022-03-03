@@ -3,7 +3,7 @@
  * @Github: 
  * @Date: 2022-03-03 10:51:07
  * @LastEditors: xuxing
- * @LastEditTime: 2022-03-03 11:14:48
+ * @LastEditTime: 2022-03-03 11:19:04
  * @Description: 
  */
 
@@ -28,5 +28,6 @@ Function.prototype.myBind = function (context = window, ...args) {
   const result = context[fn](...args)
   // 5.调用函数后即删除该Symbol属性
   delete context[fn]
+
   return result
 }
