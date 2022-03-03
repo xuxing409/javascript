@@ -3,7 +3,7 @@
  * @Github: 
  * @Date: 2022-03-03 11:31:33
  * @LastEditors: xuxing
- * @LastEditTime: 2022-03-03 13:56:47
+ * @LastEditTime: 2022-03-03 15:52:30
  * @Description: 
  */
 
@@ -18,6 +18,7 @@ Function.prototype.myBind = function (context, ...args1) {
   }
   const _this = this
   return function F(...args2) {
+    // 判断是否为构造函数调用例如：const a =  foo.myBind(b); const c = new a(11)
     if (this instanceof F) {
       return new _this(...args1, ...args2)
     }
