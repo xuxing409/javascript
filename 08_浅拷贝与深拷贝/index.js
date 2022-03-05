@@ -10,6 +10,12 @@ function deepClone(obj = {}) {
   if (typeof obj !== "obj" || obj == null) {
     return obj
   }
+  if (obj instanceof Date) {
+    return new Date(obj);
+  }
+  if (obj instanceof RegExp) {
+    return new RegExp(obj)
+  }
   // 声明拷贝的数组或对象
   let result;
   if (obj instanceof Array) {
