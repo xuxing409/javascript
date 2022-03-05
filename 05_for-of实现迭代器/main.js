@@ -7,6 +7,7 @@ const user = {
 
 // 
 Object.prototype[Symbol.iterator] = function () {
+  // Reflect.ownKeys返回一个由目标对象自身的属性键组成的数组。
   const keys = Reflect.ownKeys(this)
   const _THIS = this
   let count = 0
