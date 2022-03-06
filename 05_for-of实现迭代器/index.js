@@ -44,3 +44,4 @@ Object.prototype[Symbol.iterator] = function* () {
 for(var item of user) {
   console.log(item);
 }
+
