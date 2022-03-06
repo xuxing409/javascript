@@ -17,7 +17,7 @@ a.set('d',4)
 // console.log(genMap.next());
 // console.log(genMap.next());
 
-// 给object 补充for of方法
+// 用迭代器给object 补充for of方法
 Object.prototype[Symbol.iterator] = function () {
   var keys = Reflect.ownKeys(this)
   var _this = this
@@ -26,6 +26,18 @@ Object.prototype[Symbol.iterator] = function () {
     next: function(){
       return index < keys.length ? {value:_this[keys[index++]], done:false} : {done: true}
     }
+  }
+}
+
+// 使用生成器
+Object.prototype[Symbol.iterator] = function* () {
+  var keys = Reflect.ownKeys(this)
+  var _this = this
+  var index = 0
+
+  while(index < keys.length){
+    yield  {value:_this[keys[index++]], done:false}
+   
   }
 }
 
