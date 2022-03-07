@@ -22,6 +22,7 @@ let iteratorArr = makeIterator(arr)
 // console.log(iteratorArr.next(arr));
 // console.log(iteratorArr.next(arr));
 // console.log(iteratorArr.next(arr));
+
 let result
 
 while (!((result = iteratorArr.next()).done)) {
