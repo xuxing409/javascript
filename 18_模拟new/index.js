@@ -1,17 +1,9 @@
-// 1创建一个空的简单JavaScript对象（即{}）；
-// 2为步骤1新创建的对象添加属性__proto__，将该属性链接至构造函数的原型对象 ；
-// 3将步骤1新创建的对象作为this的上下文 ；
-// 4如果该函数没有返回对象，则返回this。
-function Animal(type){
-  this.type = type; //实例上的属性
-  //如果当前构造函数返回的是一个引用类型，需要把这个对象返回
-  return {name:'gjf'}
-}
-Animal.prototype.say = function(){
-  console.log('say')
-}
+// 创建一个新对象；
+// 新对象将被执行[[原型]]连接（连接到构造函数的原型）；
+// 构造函数中的this会绑定到新对象；
+// 如果构造函数没有返回其他对象，则自动返回这个新对象。
 
-function objectFactory1() {
+function foo() {
   const obj = new Object();
   const Constructor = Array.prototype.shift.call(arguments);
   obj.__proto__ = Constructor.prototype;
@@ -19,7 +11,11 @@ function objectFactory1() {
   // 判断ret类型，如果为null，则返回obj
   return typeof ret === 'object' ? ret || obj : obj;
 }
+function bar(aa, bb) {
+  this.name = aa
+  this.age = bb
+}
+const aa = new foo(bar, 'Tj', 18)
 
 
-const user  = new objectFactory1(Animal,'cccc')
-console.log(user);
+console.log(aa);

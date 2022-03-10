@@ -6,17 +6,17 @@ const obj = {
 }
 
 // es5 深拷贝
-function deepCloneEs5(origin, target){
+function deepCloneEs5(origin, target) {
   var tar = target || {}
   var toStr = Object.prototype.toString
   var arrType = '[object Array]'
 
   for (var key in origin) {
-    if(origin.hasOwnProperty(key)){
-      if(typeof origin[key] === 'object' && origin[key] !== null){
-        tar[key] = toStr.call(origin[key]) === arrType ? []: {}
+    if (origin.hasOwnProperty(key)) {
+      if (typeof origin[key] === 'object' && origin[key] !== null) {
+        tar[key] = toStr.call(origin[key]) === arrType ? [] : {}
         deepCloneEs5(origin[key], tar[key])
-      }else{
+      } else {
         tar[key] = origin[key]
       }
     }
@@ -67,16 +67,16 @@ function deepClonePro(obj, hashMap = new WeakMap()) {
   if (typeof obj !== "object" || obj == null) {
     return obj
   }
-  if(obj instanceof Date){
+  if (obj instanceof Date) {
     return new Date(obj)
   }
-  if(obj instanceof RegExp){
-    return new RegExp(obj)
+  if (obj instanceof RegExp) {
+    return new RegExp(obj.source, obj.flags)
   }
 
   const hashkey = hashMap.get(obj)
 
-  if(hashkey){
+  if (hashkey) {
     return hashkey
   }
 
