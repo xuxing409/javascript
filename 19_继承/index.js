@@ -10,3 +10,7 @@ function Man(name) {
   this.name = name;
   this.color = 'black';
 }
+
+// 原型继承
+Man.prototype = new People()
+
