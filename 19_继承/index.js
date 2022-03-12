@@ -25,45 +25,45 @@ function Man(name) {
 
 // 3.组合继承
 // 使用构造继承继承父类参数，使用原型继承继承父类函数
-    function Man(name) {
-      People.call(this);
-    }
-    Man.prototype = People.prototype;
+function Man(name) {
+  People.call(this);
+}
+Man.prototype = People.prototype;
 // 缺点：父类原型和子类原型是同一个对象，无法区分子类真正是由谁构造。
 
 // 4.寄生组合继承
 // 在组合继承的基础上，子类继承一个由父类原型生成的空对象。
 
-    function Man(name) {
-      People.call(this);
+function Man(name) {
+  People.call(this);
+}
+
+Man.prototype = Object.create(People.prototype, {
+  constructor: {
+    value: Man
+  }
+})
+// inherits函数：
+
+function inherits(ctor, superCtor) {
+  ctor.super_ = superCtor;
+  ctor.prototype = Object.create(superCtor.prototype, {
+    constructor: {
+      value: ctor,
+      enumerable: false,
+      writable: true,
+      configurable: true
     }
-
-    Man.prototype = Object.create(People.prototype, {
-      constructor: {
-        value: Man
-      }
-    })
-    // inherits函数：
-
-    function inherits(ctor, superCtor) {
-      ctor.super_ = superCtor;
-      ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-          value: ctor,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      });
-    }; 
+  });
+};
 
 
-    // 使用：
+// 使用：
 
-    function Man() {
-      People.call(this);
-      //...
-    }
-    inherits(Man, People);
+function Man() {
+  People.call(this);
+  //...
+}
+inherits(Man, People);
 
     // Man.prototype.fun = ...
