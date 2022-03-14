@@ -7,9 +7,13 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="content">houdunren.com</div>
-</body>
-<script>
+  <script>
+    // 当正则需要动态创建时使用对象方式
+// let web = "houdunren";
+// let reg = new RegExp(web);
+// console.log(reg.test(hd)); //true
+
+      // 1.根据用户输入高亮显示内容，支持用户输入正则表达式
   // 正则过滤替换字段颜色，正则调用replace会全部替换
   const content = prompt("请输入要搜索的内容，支持正则表达式");
   const reg = new RegExp(content, "g");
@@ -19,5 +23,6 @@
       return `<span style="color:red">${str}</span>`;
     });
   document.body.innerHTML = body;
-</script>
+  </script>
+</body>
 </html>
