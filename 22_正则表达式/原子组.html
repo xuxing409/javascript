@@ -8,9 +8,10 @@
 </head>
 <body>
 <script>
-    const hd = `<h1>houdunren.com</h1>`;
-console.log(/<(h1)>.+<\/\1>/.test(hd)); //true
+    let hd = "houdunren.com";
+    console.log(hd.match(/houdun(ren)\.(com)/)); 
 
+    // 原子组
 
 </script>
 </body>
