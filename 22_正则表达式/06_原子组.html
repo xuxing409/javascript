@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  // 原子组定义
+// 1如果一次要匹配多个元子，可以通过元子组完成
+// 2原子组与原子表的差别在于原子组一次匹配多个元子，而原子表则是匹配任意一个字符
+// 3元字符组用 () 包裹
+
+
+    // let hd = "houdunren.com";
+    // console.log(hd.match(/houdun(ren)\.(com)/)); 
+
+    // 原子组
+    // 下面使用原子组匹配标题元素
+
+    // let hd = `
+    //   <h1>houdunren</h1>
+    //   <span>后盾人</span>
+    //   <h2>hdcms</h2>
+    // `;
+
+    // console.table(hd.match(/<(h[1-6])[\s\S]*<\/\1>/g));
+
+    // 检测 0~100 的数值，使用 parseInt 将数值转为10进制
+// console.log(parseInt(09, 10));
+// console.log(/^(\d{1,2}|100)$/.test(parseInt(09, 10)));
+
+// 邮箱匹配
+// 下面使用原子组匹配邮箱
+
+// let hd = "2300071698@qq.com";
+// let reg = /^[\w\-]+@[\w\-]+\.(com|org|cn|cc|net)$/i;
+// console.dir(hd.match(reg));
+
+// 如果邮箱是以下格式 houdunren@hd.com.cn 上面规则将无效，需要定义以下方式
+
+let hd = `admin@houdunren.com.cn`;
+let reg = /^[\w-]+@([\w-]+\.)+(org|com|cc|cn)$/;
+console.log(hd.match(reg));
+</script>
+</body>
+</html>

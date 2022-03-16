@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+//     引用分组
+// \n 在匹配时引用原子组， $n 指在替换时使用匹配的组数据。下面将标签替换为p标签
+
+let hd = `
+  <h1>houdunren</h1>
+  <span>后盾人</span>
+  <h2>hdcms</h2>
+`;
+
+let reg = /<(h[1-6])>([\s\S]*)<\/\1>/gi;
+console.log(hd.replace(reg, `<p>$2</p>`));
+  </script>
+</body>
+</html>
