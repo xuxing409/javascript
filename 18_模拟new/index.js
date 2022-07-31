@@ -9,13 +9,14 @@ function foo() {
   obj.__proto__ = Constructor.prototype;
   const ret = Constructor.apply(obj, arguments);
   // 判断ret类型，如果为null，则返回obj
-  return typeof ret === 'object' ? ret || obj : obj;
+  return typeof ret === "object" ? ret || obj : obj;
 }
-function bar(aa, bb) {
-  this.name = aa
-  this.age = bb
-}
-const aa = new foo(bar, 'Tj', 18)
 
+function bar(aa, bb) {
+  this.name = aa;
+  this.age = bb;
+}
+
+const aa = new foo(bar, "Tj", 18);
 
 console.log(aa);

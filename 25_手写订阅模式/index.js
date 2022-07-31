@@ -118,10 +118,10 @@ var listener = function (args) {
 };
 
 // emitter.once('click', onceListener);
-// emitter.addListener('click', listener);
+emitter.addListener("click", listener);
 
 // emitter.emit('click', '参数');
 // emitter.emit('click');
 
-emitter.removeListener("click", listener);
+// emitter.removeListener("click", listener);
 emitter.emit("click");
