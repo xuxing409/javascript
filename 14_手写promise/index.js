@@ -1,110 +1,93 @@
-class _Promise {
-  static PEDDING = 'PEDDING';
-  static FULFILLERD = 'FULFILLERD';
-  static REJECTED = 'REJECTED';
+// 1.手写Promise 实现1
+class MyPromise {
+  static PENDING = "pending";
+  static FULFILLED = "fulfilled";
+  static REJECTED = "rejected";
   constructor(executor) {
-    this.status = _Promise.PEDDING;
-    this.value = null;
-    this.reason = null;
-    this.onFulFilledCallbacks = [];
-    this.onRejectedCallbacks = [];
-    executor(this._resolve.bind(this), this._reject.bind(this));
-  }
-
-  _resolve(value) {
-    if (this.status === _Promise.PEDDING) {
-      this.status = _Promise.FULFILLERD;
-      this.value = value;
-      this.onFulFilledCallbacks.map(fn => fn());
+    this.status = MyPromise.PENDING; //状态
+    this.value = null; // 值
+    this.callbacks = []; // pending状态下，回调收集
+    try {
+      executor(this.resolve.bind(this), this.reject.bind(this));
+    } catch (error) {
+      this.reject(error);
+      throw new Error(error);
     }
   }
-  _reject(reason) {
-    if (this.status === _Promise.PEDDING) {
-      this.status = _Promise.REJECTED;
-      this.reason = reason;
-      this.onRejectedCallbacks.map(fn => fn());
+  resolve(value) {
+    if (this.status === MyPromise.PENDING) {
+      this.status = MyPromise.FULFILLED;
+      this.value = value;
+      // 异步代码和同步代码处理
+      setTimeout(() => {
+        this.callbacks.map((callback) => {
+          callback.onFulFilled(value);
+        });
+      });
+    }
+  }
+  reject(reason) {
+    if (this.status === MyPromise.PENDING) {
+      this.status = MyPromise.REJECTED;
+      this.value = reason;
+      setTimeout(() => {
+        this.callbacks.map((callback) => {
+          callback.onRejected(reason);
+        });
+      });
     }
   }
   then(onFulFilled, onRejected) {
-    if (typeof onFulFilled !== 'function') {
-      onFulFilled = () => {
-        return this.value;
-      };
+    if (typeof onFulFilled !== "function") {
+      onFulFilled = () => this.value;
     }
-    if (typeof onRejected !== 'function') {
-      onRejected = () => {
-        console.log(this.reason);
-        return this.reason;
-      };
+    if (typeof onRejected !== "function") {
+      onRejected = () => this.value;
     }
+    let promise = new MyPromise((resolve, reject) => {
+      // settimeout 中执行resolve\reject
 
-    let promise = new _Promise((resolve, reject) => {
-      switch (this.status) {
-        case _Promise.PEDDING:
-          this.onFulFilledCallbacks.push(() => {
-            setTimeout(() => {
-              try {
-                let result = onFulFilled(this.value);
-                this.parser(promise, result, resolve, reject);
-              } catch (error) {
-                reject(error);
-              }
-            }, 4);
-          });
-          this.onRejectedCallbacks.push(() => {
-            setTimeout(() => {
-              try {
-                let result = onRejected(this.reason);
-                this.parser(promise, result, resolve, reject);
-              } catch (error) {
-                reject(error);
-              }
-            }, 4);
-          });
-          break;
-        case _Promise.FULFILLERD:
-          setTimeout(() => {
-            try {
-              let result = onFulFilled(this.value);
+      // PENDING
+      if (this.status === MyPromise.PENDING) {
+        this.callbacks.push({
+          onFulFilled: (value) => {
+            // 错误统一用onRejected处理
+            this.parse(promise, onFulFilled(value), resolve, reject);
+          },
+          onRejected: (value) => {
+            // 新返回的promise不受上一次promise的状态影响，默认使用resolve处理
+            this.parse(promise, onRejected(value), resolve, reject);
+          },
+        });
+      }
 
-              this.parser(promise, result, resolve, reject);
-            } catch (error) {
-              reject(error);
-            }
-          }, 4);
-          break;
-        case _Promise.REJECTED:
-          setTimeout(() => {
-            try {
-              let result = onRejected(this.reason);
-              this.parser(promise, result, resolve, reject);
-            } catch (error) {
-              reject(error);
-            }
-          }, 4);
-          break;
-        default:
-          break;
+      // FULFILLED
+      if (this.status === MyPromise.FULFILLED) {
+        // 实现异步
+        setTimeout(() => {
+          this.parse(promise, onFulFilled(this.value), resolve, reject);
+        });
+      }
+
+      // REJECTED
+      if (this.status === MyPromise.REJECTED) {
+        setTimeout(() => {
+          this.parse(promise, onRejected(this.value), resolve, reject);
+        });
       }
     });
     return promise;
   }
-
-  parser(promise, result, resolve, reject) {
+  parse(promise, result, resolve, reject) {
+    // 特性：返回类型不能是当前promise
     if (promise === result) {
-      throw TypeError('Chaining cycle detected for promise');
+      throw TypeError("Chaining cycle detected for promise");
     }
-
     try {
-      if (result instanceof _Promise) {
-        result.then(
-          value => {
-            resolve(value);
-          },
-          reason => {
-            reject(reason);
-          }
-        );
+      // 判断返回的是否为新的promise
+      // 新的promise 就拿到返回值将其返回到链式的then中
+      if (result instanceof MyPromise) {
+        result.then(resolve, reject);
       } else {
         resolve(result);
       }
@@ -113,58 +96,74 @@ class _Promise {
     }
   }
   static resolve(value) {
-    return new _Promise((resolve, reject) => {
-      if (value instanceof _Promise) {
-        value.then(value => {
-          resolve(value);
-        });
+    return new MyPromise((resolve, reject) => {
+      // 判断参数是否promise（比如传递一个异步请求ajax
+      if (value instanceof MyPromise) {
+        value.then(resolve, reject);
       } else {
         resolve(value);
       }
     });
   }
   static reject(value) {
-    return new _Promise((resolve, reject) => {
-      if (value instanceof _Promise) {
-        value.then(null, reason => {
-          reject(reason);
-        });
+    return new MyPromise((resolve, reject) => {
+      if (value instanceof MyPromise) {
+        value.then(null, reject);
       } else {
         reject(value);
       }
     });
   }
-  static all(promiseCollection) {
+  /**
+   * 这个方法返回一个新的 promise 对象，
+   * 等到所有的 promise 对象都成功或有任意一个 promise 失败。
+   */
+  static all(promises) {
     const values = [];
-    return new _Promise((resolve, reject) => {
-      promiseCollection.forEach(promise => {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise) => {
         promise.then(
-          value => {
+          (value) => {
             values.push(value);
-            if (values.length === promiseCollection.length) {
+            if (values.length === promises.length) {
               resolve(values);
             }
           },
-          reason => {
+          (reason) => {
             reject(reason);
           }
         );
       });
     });
   }
-  static race(promiseCollection) {
-    return new _Promise((resolve, reject) => {
-      promiseCollection.map(promise => {
-        console.log(promise);
+  // 等到任意一个 promise 的状态变为已敲定。
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises.map((promise) => {
         promise.then(
-          value => {
+          (value) => {
             resolve(value);
           },
-          reason => {
+          (reason) => {
             reject(reason);
           }
         );
       });
     });
+  }
+  /**
+   * 最终执行方法
+   */
+  finally(fn) {
+    return this.then(
+      (value) => {
+        fn();
+        return value;
+      },
+      (reason) => {
+        fn();
+        throw reason;
+      }
+    );
   }
 }
