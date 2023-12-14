@@ -8,6 +8,7 @@ function PromiseAll(promiseArray) {
     }
 
     promiseArray.forEach((promiseItem, index) => {
+      // promiseArray[i] 可能不是数组，包裹上Promise.resolve 即使不是promise也会返回一个promise包裹，保证.then不会报错
       Promise.resolve(promiseItem)
         .then((res) => {
           result.push(res);
